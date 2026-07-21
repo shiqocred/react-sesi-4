@@ -68,6 +68,11 @@ const LoginForm = ({ next }: LoginFormProps) => {
 
     const payload = (await response.json()) as LoginResponse;
 
+    if (!payload.accessToken) {
+      setServerError("Response login tidak mengirim access token.");
+      return;
+    }
+
     cookie.set("session", payload.accessToken, {
       path: "/",
       sameSite: "lax",

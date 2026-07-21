@@ -23,7 +23,7 @@ type AuthResult =
 export const auth = async (): Promise<AuthResult> => {
   const session = (await cookies()).get("session")?.value;
 
-  if (!session) {
+  if (!session || session === "undefined" || session === "null") {
     return { isAuth: false, user: null };
   }
 
@@ -38,12 +38,8 @@ export const auth = async (): Promise<AuthResult> => {
     cache: "no-store",
   });
 
-  if (response.status === 401 || response.status === 403) {
-    return { isAuth: false, user: null };
-  }
-
   if (!response.ok) {
-    throw new Error("Gagal memverifikasi session pengguna.");
+    return { isAuth: false, user: null };
   }
 
   const user = (await response.json()) as AuthUser;

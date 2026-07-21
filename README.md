@@ -34,13 +34,15 @@ Isi contoh:
 ```env
 DATABASE_URL="postgres://postgres:postgres@localhost:5432/sesi4"
 API_URL="http://localhost:3000/api"
+NEXT_PUBLIC_API_URL="http://localhost:3000/api"
 CORS_ORIGINS="*"
 ```
 
 Keterangan:
 
 - `DATABASE_URL` wajib diisi sesuai database PostgreSQL lokal kamu.
-- `API_URL` digunakan oleh `auth()` untuk memanggil endpoint `/me`.
+- `API_URL` digunakan oleh `auth()` untuk memanggil endpoint `/api/me` dari server.
+- `NEXT_PUBLIC_API_URL` bisa dipakai frontend lain bila butuh base URL publik. Untuk production isi `https://react-sesi-4.sro.my.id/api`.
 - `CORS_ORIGINS="*"` membuat API bisa diakses dari semua origin. Mode ini cocok untuk Bearer token dan tidak mengirim `Access-Control-Allow-Credentials`.
 
 ## 3. Siapkan database PostgreSQL
