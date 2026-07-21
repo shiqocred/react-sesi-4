@@ -20,20 +20,11 @@ type LoginFormProps = {
 
 type LoginResponse = {
   accessToken: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    role: "admin" | "staff";
-  };
 };
 
 const LoginForm = ({ next }: LoginFormProps) => {
   const cookie = useCookie();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [loginResponse, setLoginResponse] = useState<LoginResponse | null>(
-    null,
-  );
 
   const {
     register,
@@ -49,7 +40,6 @@ const LoginForm = ({ next }: LoginFormProps) => {
 
   const onSubmit = async (values: LoginFormValues) => {
     setServerError(null);
-    setLoginResponse(null);
 
     // API login mengembalikan JSON token; cookie internal dibuat di client.
     const response = await fetch(`${apiUrl}/login`, {
@@ -79,7 +69,7 @@ const LoginForm = ({ next }: LoginFormProps) => {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    setLoginResponse(payload);
+    window.location.assign(next);
   };
 
   return (
@@ -130,30 +120,6 @@ const LoginForm = ({ next }: LoginFormProps) => {
       >
         {isSubmitting ? "Memproses..." : "Login"}
       </button>
-
-      {loginResponse ? (
-        <section className="grid gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
-          <div>
-            <h2 className="font-semibold text-green-950">Response Login</h2>
-            <p className="text-sm text-green-700">
-              API mengembalikan JSON. Token juga disimpan ke cookie client untuk
-              akses portal internal.
-            </p>
-          </div>
-
-          <pre className="max-h-72 overflow-auto rounded-lg bg-zinc-950 p-4 text-xs text-green-200">
-            {JSON.stringify(loginResponse, null, 2)}
-          </pre>
-
-          <button
-            type="button"
-            onClick={() => window.location.assign(next)}
-            className="rounded-lg bg-green-700 px-4 py-2 font-semibold text-white transition hover:bg-green-800"
-          >
-            Lanjut ke Portal
-          </button>
-        </section>
-      ) : null}
     </form>
   );
 };
